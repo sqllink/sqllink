@@ -1,0 +1,341 @@
+<?xml version="1.0"?>
+<!--
+Licensed to the Apache Software Foundation (ASF) under one or more
+contributor license agreements.  See the NOTICE file distributed with
+this work for additional information regarding copyright ownership.
+The ASF licenses this file to you under the Apache License, Version 2.0
+(the "License"); you may not use this file except in compliance with
+the License.  You may obtain a copy of the License at
+
+http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+
+<!--
+  This version of checkstyle is based on the Apache Giraph checkstyle
+  configuration, which in turn is based on Hadoop and common-math
+  configurations.
+
+  The documentation for checkstyle is available at
+
+  http://checkstyle.sourceforge.net
+-->
+<!DOCTYPE module PUBLIC
+        "-//Puppy Crawl//DTD Check Configuration 1.3//EN"
+        "http://www.puppycrawl.com/dtds/configuration_1_3.dtd">
+
+<module name="Checker">
+
+    <!-- Checks for headers -->
+    <!-- See http://checkstyle.sf.net/config_header.html -->
+    <!-- Verify that EVERY source file has the appropriate license -->
+    <!-- 检查所有文件是否有license -->
+    <module name="Header">
+        <property name="headerFile" value="src/main/config/checkstyle/header.java.txt"/>
+        <property name="fileExtensions" value="cql,java,jj,json,kt"/>
+    </module>
+    <module name="Header">
+        <property name="headerFile" value="src/main/config/checkstyle/header.properties.txt"/>
+        <property name="fileExtensions" value="properties"/>
+    </module>
+    <module name="Header">
+        <property name="headerFile" value="src/main/config/checkstyle/header.xml.txt"/>
+        <property name="fileExtensions" value="xml"/>
+    </module>
+
+    <!-- Checks for Javadoc comments (checker).           -->
+    <!-- See http://checkstyle.sf.net/config_javadoc.html -->
+    <!-- Require package javadoc -->
+    <!-- 检查每个包中是否有java注释文件，默认有package-info.java -->
+    <!--<module name="JavadocPackage"/>-->
+
+    <!-- Miscellaneous other checks (checker).         -->
+    <!-- See http://checkstyle.sf.net/config_misc.html -->
+    <!-- Require files to end with newline characters -->
+    <!-- 检查文件是否以一个空行结束 -->
+    <module name="NewlineAtEndOfFile">
+        <property name="lineSeparator" value="lf"/>
+    </module>
+
+    <!-- Checks for long source files -->
+    <!-- See https://checkstyle.sourceforge.io/config_sizes.html -->
+    <!-- 文件长度不超过1500行 -->
+    <module name="FileLength">
+        <property name="max" value="1500"/>
+    </module>
+
+    <!-- Checks for whitespace (tree walker)                 -->
+    <!-- See http://checkstyle.sf.net/config_whitespace.html -->
+    <!-- No tabs allowed! -->
+    <!-- 检查文件中是否含有'\t' -->
+    <module name="FileTabCharacter"/>
+
+    <!-- 每个java文件一个语法树 -->
+    <module name="TreeWalker">
+        <property name="cacheFile" value="target/checkstyle-cachefile"/>
+
+        <!-- Checks for blocks. You know, those {}'s         -->
+        <!-- 代码块检查 -->
+        <!-- See http://checkstyle.sf.net/config_blocks.html -->
+        <!-- No empty blocks (i.e. catch); must contain at least a comment -->
+        <!-- 检查是否有空代码块 -->
+        <module name="EmptyBlock">
+            <property name="option" value="text"/>
+        </module>
+        <!-- 检查是否有嵌套代码块 -->
+        <module name="AvoidNestedBlocks">
+            <property name="allowInSwitchCase" value="true"/>
+        </module>
+        <!-- 检查左大括号位置 -->
+        <module name="LeftCurly"/>
+        <!-- No if/else/do/for/while without braces -->
+        <!-- 检查代码块是否缺失{} -->
+        <module name="NeedBraces"/>
+        <!-- 检查右大括号位置 -->
+        <module name="RightCurly"/>
+
+        <!-- Checks for class design                         -->
+        <!-- 类设计检查 -->
+        <!-- See http://checkstyle.sf.net/config_design.html -->
+        <!-- Utility class should not be instantiated, they must have a
+        private constructor -->
+        <!-- 检查工具类是否有public的构造器 -->
+        <module name="HideUtilityClassConstructor"/>
+
+        <!-- Checks for common coding problems               -->
+        <!-- 代码检查 -->
+        <!-- See http://checkstyle.sf.net/config_coding.html -->
+        <!-- 检查空的代码段 -->
+        <module name="EmptyStatement"/>
+        <!-- Require hash code override when equals is -->
+        <!-- 检查在重写了equals方法后是否重写了hashCode方法 -->
+        <module name="EqualsHashCode"/>
+        <!-- Disallow unnecessary instantiation of Boolean, String -->
+        <!-- 检查是否使用工厂方法实例化 -->
+        <module name="IllegalInstantiation">
+            <property name="classes" value="java.lang.Boolean, java.lang.String"/>
+        </module>
+        <!-- Switch statements should be complete and with independent cases -->
+        <module name="FallThrough"/>
+        <!-- 检查是否有过度复杂的布尔表达式 -->
+        <module name="SimplifyBooleanExpression"/>
+        <!-- 检查是否有过于复杂的布尔返回代码段 -->
+        <module name="SimplifyBooleanReturn"/>
+        <!-- Only one statement per line allowed -->
+        <module name="OneStatementPerLine"/>
+        <!-- Don't add up parentheses when they are not required -->
+        <!-- 不必要的圆括号 -->
+        <module name="UnnecessaryParentheses"/>
+        <!-- Don't use = or != for string comparisons -->
+        <module name="StringLiteralEquality"/>
+        <!-- Don't declare multiple variables in the same statement -->
+        <module name="MultipleVariableDeclarations"/>
+        <!-- String literals more than one character long should not be
+             repeated several times -->
+        <!-- the "unchecked" string is also accepted to allow
+             @SuppressWarnings("unchecked") -->
+        <!-- Disabling for now until we have a better ignoreStringsRegexp -->
+        <!--
+      <module name="MultipleStringLiterals" >
+        <property name="ignoreStringsRegexp" value='^(("")|(".")|("unchecked"))$'/>
+      </module>
+        -->
+
+        <!-- Checks for imports                              -->
+        <!-- import检查-->
+        <!-- See http://checkstyle.sf.net/config_import.html -->
+        <!-- 检查是否导入了多余的包 -->
+        <module name="RedundantImport"/>
+        <!-- Import should be explicit, and only from pure java packages.
+             But we allow imports that are only used in javadoc. -->
+        <!-- 没用的import检查，比如：1.没有被用到2.重复的3.import java.lang的4.import 与该类在同一个package的 -->
+        <module name="UnusedImports">
+            <property name="processJavadoc" value="true"/>
+        </module>
+        <!-- 检查是否从非法的包中导入了类 -->
+        <module name="IllegalImport"/>
+        <!-- 避免使用* -->
+        <module name="AvoidStarImport"/>
+        <!-- 导入顺序检查 -->
+        <module name="ImportOrder">
+            <property name="groups"
+                      value="org.github.sql-a,org.apache,com.,io.,mondrian.,net.,org.,scala.,/^javax?\./"/>
+            <property name="ordered" value="true"/>
+            <property name="separated" value="true"/>
+            <property name="option" value="bottom"/>
+        </module>
+
+        <!-- Checks for Javadoc comments (tree walker).       -->
+        <!-- See http://checkstyle.sf.net/config_javadoc.html -->
+        <!-- Javadoc must be formatted correctly -->
+        <!-- 风格注释 -->
+        <module name="JavadocStyle">
+            <property name="checkFirstSentence" value="false"/>
+        </module>
+        <!-- Must have class / interface header comments -->
+        <!-- 类型注释 -->
+        <module name="JavadocType"/>
+
+        <!-- Miscellaneous other checks (tree walker).     -->
+        <!-- See http://checkstyle.sf.net/config_misc.html -->
+        <!-- Java style arrays -->
+        <!-- 检查数组类型定义的样式 -->
+        <module name="ArrayTypeStyle"/>
+        <!-- Indentation -->
+        <!-- 代码缩进 -->
+        <module name="Indentation">
+            <property name="caseIndent" value="0"/>
+            <property name="basicOffset" value="2"/>
+            <property name="braceAdjustment" value="0"/>
+        </module>
+        <!-- Turn this on to see what needs to be done
+      <module name="TodoComment"/>
+         -->
+        <!-- 检查long型定义是否有大写的“L” -->
+        <module name="UpperEll"/>
+
+        <!-- 操作符换行策略检查 -->
+        <module name="OperatorWrap"/>
+
+        <!-- Modifier Checks                                    -->
+        <!-- See http://checkstyle.sf.net/config_modifiers.html -->
+        <!-- Use a consistent way to put modifiers -->
+        <!-- 修饰符检查 -->
+        <!-- 检查修饰符的顺序是否遵照java语言规范，默认public、protected、private、abstract、static、final、transient、volatile、synchronized、native、strictfp -->
+        <module name="ModifierOrder"/>
+        <!-- 检查接口和annotation中是否有多余修饰符，如接口方法不必使用public -->
+        <module name="RedundantModifier"/>
+
+        <!-- Checks for Naming Conventions.                  -->
+        <!-- See http://checkstyle.sf.net/config_naming.html -->
+        <!-- Constant names should obey the traditional all uppercase
+             naming convention -->
+        <!-- 常量名的检查（只允许大写），默认^[A-Z][A-Z0-9]*(_[A-Z0-9]+)*$ -->
+        <module name="ConstantName"/>
+        <!-- 局部的final变量，包括catch中的参数的检查 -->
+        <module name="LocalFinalVariableName">
+            <!-- Allow '_' except first. -->
+            <property name="format" value="^[a-z][a-zA-Z0-9_]*$"/>
+        </module>
+        <!-- 局部的非final型的变量，包括catch中的参数的检查 -->
+        <module name="LocalVariableName">
+            <!-- Allow '_' except first. -->
+            <property name="format" value="^[a-z][a-zA-Z0-9_]*$"/>
+        </module>
+        <!-- 非static型变量的检查 -->
+        <module name="MemberName"/>
+        <!-- 方法名的检查 -->
+        <module name="MethodName">
+            <!-- Allow trailing '_', signifying private methods.
+                 Also allow '_' prefix, indicating disabled method or junit test. -->
+            <property name="format" value="^_?[a-z][a-zA-Z0-9]*_?$"/>
+        </module>
+        <!-- 包名的检查（只允许小写字母），默认^[a-z]+(\.[a-zA-Z_][a-zA-Z_0-9_]*)*$ -->
+        <module name="PackageName"/>
+        <module name="ParameterName">
+            <!-- Allow trailing '_'. -->
+            <property name="format" value="^[a-z][a-zA-Z0-9]*_?$"/>
+        </module>
+        <!-- 仅仅是static型的变量（不包括static final型）的检查 -->
+        <module name="StaticVariableName"/>
+        <!-- Class或Interface名检查，默认^[A-Z][a-zA-Z0-9]*$-->
+        <module name="TypeName"/>
+
+        <!-- Checks for regexp expressions.                  -->
+        <!-- See http://checkstyle.sf.net/config_regexp.html -->
+
+        <!-- No trailing whitespace -->
+        <module name="Regexp">
+            <property name="format" value="[ \t]+$"/>
+            <property name="illegalPattern" value="true"/>
+            <property name="message" value="Trailing whitespace"/>
+        </module>
+
+        <!-- Authors should be in pom.xml file -->
+        <module name="Regexp">
+            <property name="format" value="@author"/>
+            <property name="illegalPattern" value="true"/>
+            <property name="message" value="developers names should be in pom file"/>
+        </module>
+
+        <!-- No multi-line C-style comments except at start of line. -->
+        <module name="Regexp">
+            <property name="format" value="^ +/\*[^*][^/]$"/>
+            <property name="illegalPattern" value="true"/>
+            <property name="message" value="C-style comment"/>
+        </module>
+
+        <module name="Regexp">
+            <property name="format" value="^ +/\*$"/>
+            <property name="illegalPattern" value="true"/>
+            <property name="message" value="C-style comment"/>
+        </module>
+
+        <!-- Checks for Size Violations.                    -->
+        <!-- See http://checkstyle.sf.net/config_sizes.html -->
+        <!-- Lines cannot exceed 80 chars, except if they are hyperlinks
+             or strings (possibly preceded by '+' and followed by say '),'. -->
+        <!-- 每行不超过150个字符 -->
+        <module name="LineLength">
+            <property name="max" value="150"/>
+            <property name="ignorePattern" value="^import|@see|@link|@BaseMessage|href|^[ +]*&quot;.*&quot;[);,]*$"/>
+        </module>
+        <!-- Over time, we will revise this down -->
+        <!-- 方法不超过150行 -->
+        <module name="MethodLength">
+            <property name="max" value="300"/>
+        </module>
+
+        <!-- Checks for whitespace (tree walker)                 -->
+        <!-- See http://checkstyle.sf.net/config_whitespace.html -->
+        <module name="EmptyForIteratorPad"/>
+        <!-- Spacing around methods -->
+        <!-- 方法名后跟左圆括号"(" -->
+        <module name="MethodParamPad">
+            <property name="option" value="nospace"/>
+            <property name="allowLineBreaks" value="true"/>
+        </module>
+        <!-- No whitespace before a token -->
+        <module name="NoWhitespaceBefore"/>
+        <!-- Whitespace after tokens is required -->
+        <module name="WhitespaceAfter"/>
+        <!-- Whitespace around tokens is required -->
+        <module name="WhitespaceAround">
+            <property name="allowEmptyConstructors" value="true"/>
+            <property name="allowEmptyMethods" value="true"/>
+        </module>
+        <module name="ParenPad"/>
+        <module name="TypecastParenPad"/>
+        <!-- No extra whitespace around types -->
+        <module name="GenericWhitespace"/>
+
+        <!-- Required for SuppressionCommentFilter below -->
+        <module name="FileContentsHolder"/>
+    </module>
+
+    <!--&lt;!&ndash; Setup special comments to suppress specific checks from source files &ndash;&gt;-->
+    <!--<module name="SuppressionCommentFilter">-->
+        <!--<property name="offCommentFormat" value="CHECKSTYLE\: stop ([\w\|]+)"/>-->
+        <!--<property name="onCommentFormat" value="CHECKSTYLE\: resume ([\w\|]+)"/>-->
+        <!--<property name="checkFormat" value="$1"/>-->
+    <!--</module>-->
+
+    <!--&lt;!&ndash; Turn off all checks between OFF and ON &ndash;&gt;-->
+    <!--<module name="SuppressionCommentFilter">-->
+        <!--<property name="offCommentFormat" value="CHECKSTYLE\: OFF"/>-->
+        <!--<property name="onCommentFormat" value="CHECKSTYLE\: ON"/>-->
+    <!--</module>-->
+
+    <!--&lt;!&ndash; Turn off checks for the next N lines. &ndash;&gt;-->
+    <!--<module name="SuppressWithNearbyCommentFilter">-->
+        <!--<property name="commentFormat" value="CHECKSTYLE: +IGNORE (\d+)"/>-->
+        <!--<property name="influenceFormat" value="$1"/>-->
+    <!--</module>-->
+
+    <!--<module name="net.hydromatic.toolbox.checkstyle.HydromaticFileSetCheck"/>-->
+</module>
