@@ -164,7 +164,7 @@ limitations under the License.
         <!-- 导入顺序检查 -->
         <module name="ImportOrder">
             <property name="groups"
-                      value="org.github.sql-a,org.apache,com.,io.,mondrian.,net.,org.,scala.,/^javax?\./"/>
+                      value="org.github.sqllink,org.apache,com.,io.,mondrian.,net.,org.,scala.,/^javax?\./"/>
             <property name="ordered" value="true"/>
             <property name="separated" value="true"/>
             <property name="option" value="bottom"/>
